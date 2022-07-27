@@ -1,0 +1,1 @@
+#### To be honest , it was trivial to make the memroy and computer sections but i couldn't make the CPU section myself , i finished about 70-80% myself and i was stuck so i fetched some websites to grab the code and then i understood what was i mising
