@@ -43,39 +43,38 @@ CHIP ALU {
 
     PARTS:
 
+    // Check zx flag
+    And16(a=x[0..15], b=false, out=outZeroX);
+    Mux16(a=x[0..15], b=outZeroX, sel=zx, out=outZX);
+
+    // Check nx flag
+    Not16(in=outZX, out=outNegX);
+    Mux16(a=outZX, b=outNegX, sel=nx, out=outNX); // x out
     
+    // Check zy flag
+    And16(a=y[0..15], b=false, out=outZeroY);
+    Mux16(a=y[0..15], b=outZeroY, sel=zy, out=outZY);
+
+    // Check ny flag
+    Not16(in=outZY, out=outNegY);
+    Mux16(a=outZY, b=outNegY, sel=ny, out=outNY); // y out
+
+    // Check f flag
+    Add16(a=outNX, b=outNY, out=outAdded);
+    And16(a=outNX, b=outNY, out=outAnded);
+    Mux16(a=outAnded, b=outAdded, sel=f, out=outF); // preprocessed output
     
+    // Check no flag
+    Not16(in=outF, out=outNotted);
+    Mux16(a=outF, b=outNotted, sel=no, out=outTest);
 
-    
+    // Check zr flag, Oring all bits with themselves
+    Or16Way(in=outTest, out=outOR);
+    Not(in=outOR, out=zr);
 
-    //implement the Zx
-    Mux16(a=x[0..15],b[0..15]=false,sel=zx,out=zxOut);
+    //Check ng flag
+    Or16(a[0..15]=false,b=outTest,out[15]=ng,out[0..14]=false);
 
-    //implenet the Zy
-    Mux16(a=y[0..15],b[0..15]=false,sel=zy,out=yxOut);
-
-    //implenet the Nx
-    Not16(in=zxOut,out=xNotOut);
-    Mux16(a=zxOut,b=xNotOut,sel=nx,out=nxTotal);
-
-    //implenet the Ny
-    Not16(in=yxOut,out=yNotOut);
-    Mux16(a=yxOut,b=yNotOut,sel=ny,out=nyTotal);
-
-    //implement the f
-    Add16(a=nxTotal,b=nyTotal,out=outFAdd);
-    And16(a=nxTotal,b=nyTotal,out=outFAnd);
-    Mux16(a=outFAnd,b=outFAdd,sel=f,out=fOut);
-
-    //implement the out
-    Not16(in=fOut,out=notfOut);
-    Mux16(a=fOut,b=notfOut,sel=no,out=outLS);
-
-    Or16Way(in=outLS,out=outOr);
-    Not(in=outOr,out=zr);
-
-
-
-    And16(a[0..15]=true,b=outLS,out[15]=ng,out[0..14]=drop);
-    And16(a[0..15]=true,b=outLS,out=out);
+    // Final out
+    Or16(a[0..15]=false,b=outTest,out=out);
 }
