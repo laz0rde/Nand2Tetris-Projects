@@ -13,19 +13,7 @@ CHIP Or16Way {
     OUT out;
 
     PARTS:
-    Or(a=in[0],b=in[1],out=Or1);
-    Or(a=Or1,b=in[2],out=Or2);
-    Or(a=Or2,b=in[3],out=Or3);
-    Or(a=Or3,b=in[4],out=Or4);
-    Or(a=Or4,b=in[5],out=Or5);
-    Or(a=Or5,b=in[6],out=Or6);
-    Or(a=Or6,b=in[7],out=Or7);
-    Or(a=Or7,b=in[8],out=Or8);
-    Or(a=Or8,b=in[9],out=Or9);
-    Or(a=Or9,b=in[10],out=Or10);
-    Or(a=Or10,b=in[11],out=Or11);
-    Or(a=Or11,b=in[12],out=Or12);
-    Or(a=Or12,b=in[13],out=Or13);
-    Or(a=Or13,b=in[14],out=Or14);
-    Or(a=Or14,b=in[15],out=out);
+    Or8Way(in=in[0..7], out=out1);
+    Or8Way(in=in[8..15], out=out2);
+    Or(a=out1, b=out2, out=out);
 }
